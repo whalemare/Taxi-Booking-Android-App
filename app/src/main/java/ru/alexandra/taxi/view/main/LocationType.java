@@ -8,7 +8,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import ru.alexandra.taxi.tukla.Place;
+import ru.alexandra.taxi.model.Place;
 
 import static android.app.Activity.RESULT_OK;
 

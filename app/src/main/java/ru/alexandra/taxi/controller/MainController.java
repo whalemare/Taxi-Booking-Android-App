@@ -1,6 +1,9 @@
 package ru.alexandra.taxi.controller;
 
-import ru.alexandra.taxi.tukla.Place;
+import android.util.Pair;
+
+import ru.alexandra.taxi.model.MainInteractor;
+import ru.alexandra.taxi.model.Place;
 import ru.alexandra.taxi.view.main.LocationType;
 import ru.alexandra.taxi.view.main.MainView;
 
@@ -9,6 +12,9 @@ import ru.alexandra.taxi.view.main.MainView;
  * @since 2019
  */
 public class MainController extends BaseController<MainView> {
+
+    MainInteractor interactor = new MainInteractor();
+    Pair<Place, Place> userRoute = new Pair<>(null, null);
 
     /**
      * Пользователь хочет выбрать точку отправления или назначения
@@ -28,6 +34,16 @@ public class MainController extends BaseController<MainView> {
     }
 
     public void onLocationSelected(LocationType type, Place place) {
+        switch (type) {
+            case FROM:
+                userRoute = new Pair<>(place, userRoute.second);
+                break;
+            case TO:
+                userRoute = new Pair<>(userRoute.first, place);
+                break;
+        }
+        int price = interactor.calculatePrice(userRoute);
         isAttach(view -> view.showSelectedLocation(type, place));
+        isAttach(view -> view.showPrice(price));
     }
 }

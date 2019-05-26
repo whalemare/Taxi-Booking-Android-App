@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     Button buttonLocationFrom;
     Button buttonOrder;
     Button buttonLocationTo;
+    TextView textPrice;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity
         buttonLocationFrom = (Button) findViewById(R.id.buttonLocationFrom);
         buttonLocationTo = (Button) findViewById(R.id.buttonLocationTo);
         buttonOrder = (Button) findViewById(R.id.buttonOrder);
+        textPrice = (TextView) findViewById(R.id.price_text);
 
         buttonOrder.setOnClickListener(v -> {
             controller.onClickOrder();
@@ -394,7 +397,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (type != null) {
-            ru.alexandra.taxi.tukla.Place place = type.extractLocation(this, requestCode, resultCode, data);
+            ru.alexandra.taxi.model.Place place = type.extractLocation(this, requestCode, resultCode, data);
             controller.onLocationSelected(type, place);
             type = null;
         }
@@ -644,7 +647,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showSelectedLocation(LocationType type, ru.alexandra.taxi.tukla.Place place) {
+    public void showSelectedLocation(LocationType type, ru.alexandra.taxi.model.Place place) {
         switch (type) {
             case FROM:
                 buttonLocationFrom.setText(place.toString());
@@ -653,6 +656,11 @@ public class MainActivity extends AppCompatActivity
                 buttonLocationTo.setText(place.toString());
                 break;
         }
+    }
+
+    @Override
+    public void showPrice(int price) {
+        textPrice.setText(String.valueOf(price));
     }
 
     @Override

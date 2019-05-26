@@ -47,8 +47,6 @@
             </intent-filter>
         </activity>
         <activity android:name="ru.alexandra.taxi.view.location.LocationActivity"/>
-        <activity android:name="ru.alexandra.taxi.tukla.FindDriver">
-        </activity>
     </application>
 
 </manifest>

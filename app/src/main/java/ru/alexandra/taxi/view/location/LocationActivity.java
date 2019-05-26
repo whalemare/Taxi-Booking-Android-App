@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.alexandra.taxi.controller.LocationController;
-import ru.alexandra.taxi.tukla.Place;
-import ru.alexandra.taxi.tukla.PlacesAdapter;
+import ru.alexandra.taxi.model.Place;
 
 
 public class LocationActivity extends AppCompatActivity

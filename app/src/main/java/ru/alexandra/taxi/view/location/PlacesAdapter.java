@@ -1,4 +1,4 @@
-package ru.alexandra.taxi.tukla;
+package ru.alexandra.taxi.view.location;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.tukla.www.tukla.R;
 
 import java.util.List;
+
+import ru.alexandra.taxi.model.Place;
 
 /**
  * Created by Lenovo on 10/23/2017.

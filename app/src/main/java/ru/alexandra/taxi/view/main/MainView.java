@@ -1,6 +1,6 @@
 package ru.alexandra.taxi.view.main;
 
-import ru.alexandra.taxi.tukla.Place;
+import ru.alexandra.taxi.model.Place;
 
 /**
  * @author Anton Vlasov - whalemare
@@ -10,4 +10,6 @@ public interface MainView {
     void showSelectLocationView(LocationType type);
 
     void showSelectedLocation(LocationType type, Place place);
+
+    void showPrice(int price);
 }
