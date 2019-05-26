@@ -1,4 +1,4 @@
-package com.tukla.www.tukla;
+package ru.alexandra.taxi.tukla;
 
 import org.junit.Test;
 

@@ -37,7 +37,7 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name="ru.alexandra.taxi.view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -46,8 +46,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".LocationAutoActivity"/>
-        <activity android:name=".FindDriver">
+        <activity android:name="ru.alexandra.taxi.tukla.LocationAutoActivity"/>
+        <activity android:name="ru.alexandra.taxi.tukla.FindDriver">
         </activity>
     </application>
 

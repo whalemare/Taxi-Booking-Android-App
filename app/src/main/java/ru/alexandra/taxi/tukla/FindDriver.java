@@ -1,0 +1,15 @@
+package ru.alexandra.taxi.tukla;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.tukla.www.tukla.R;
+
+public class FindDriver extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_find_driver);
+    }
+}

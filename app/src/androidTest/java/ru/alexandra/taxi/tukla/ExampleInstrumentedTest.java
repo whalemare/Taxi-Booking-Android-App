@@ -1,4 +1,4 @@
-package com.tukla.www.tukla;
+package ru.alexandra.taxi.tukla;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
