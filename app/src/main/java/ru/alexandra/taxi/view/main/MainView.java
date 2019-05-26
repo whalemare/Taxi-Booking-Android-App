@@ -1,5 +1,7 @@
 package ru.alexandra.taxi.view.main;
 
+import java.util.Calendar;
+
 import ru.alexandra.taxi.model.Place;
 
 /**
@@ -14,4 +16,6 @@ public interface MainView {
     void showPrice(int price);
 
     void setOrderEnabled(boolean enable);
+
+    void showOrderTime(Calendar orderTime);
 }

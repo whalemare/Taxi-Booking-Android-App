@@ -172,9 +172,7 @@
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-
-                                >
+                                android:layout_marginLeft="20dp">
 
                                 <com.github.vipulasri.timelineview.TimelineView
                                     android:id="@+id/time_marker"
@@ -210,9 +208,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:orientation="vertical"
-
-            >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -223,16 +219,17 @@
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:enabled="false"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
+                    android:enabled="false"
                     android:gravity="center|center_vertical"
                     android:text="@string/make_order" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/buttonOrder">
+                    android:layout_above="@id/buttonOrder"
+                    android:orientation="vertical">
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/product_description_card"
@@ -257,8 +254,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
-                                android:text="200.50"
                                 android:layout_marginStart="8dp"
+                                android:text="200.50"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
@@ -284,6 +281,50 @@
                                 android:src="@drawable/product_type_1" />
 
                         </RelativeLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:padding="4dp"
+                        app:cardUseCompatPadding="true"
+                        card_view:cardCornerRadius="@dimen/card_corner_radius"
+                        card_view:cardElevation="@dimen/cardview_elevation">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/containerTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="30dp"
+                                android:layout_marginBottom="5dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:gravity="center|start"
+                                    android:text="@string/text_select_time"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/textTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="@string/now"
+                                    android:textSize="17sp" />
+
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -385,7 +426,7 @@
 
                         </android.support.v7.widget.CardView>
                     </RelativeLayout>
-                </RelativeLayout>
+                </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

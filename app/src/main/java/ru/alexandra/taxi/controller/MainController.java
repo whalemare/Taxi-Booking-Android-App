@@ -2,6 +2,8 @@ package ru.alexandra.taxi.controller;
 
 import android.util.Pair;
 
+import java.util.Calendar;
+
 import ru.alexandra.taxi.model.MainInteractor;
 import ru.alexandra.taxi.model.Place;
 import ru.alexandra.taxi.view.main.LocationType;
@@ -15,6 +17,7 @@ public class MainController extends BaseController<MainView> {
 
     MainInteractor interactor = new MainInteractor();
     Pair<Place, Place> userRoute = new Pair<>(null, null);
+    Calendar orderTime = null;
 
     /**
      * Пользователь хочет выбрать точку отправления или назначения
@@ -46,7 +49,14 @@ public class MainController extends BaseController<MainView> {
         isAttach(view -> view.showSelectedLocation(type, place));
         isAttach(view -> {
             view.showPrice(price);
-            view.setOrderEnabled(userRoute.first != null & userRoute.second != null);
+            view.setOrderEnabled(userRoute.first != null & userRoute.second != null && orderTime != null);
         });
+    }
+
+    public void onSelectTime(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth, hourOfDay, minute);
+        orderTime = calendar;
+        isAttach(view -> view.showOrderTime(orderTime));
     }
 }

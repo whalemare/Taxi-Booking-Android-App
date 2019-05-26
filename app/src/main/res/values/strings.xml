@@ -16,6 +16,8 @@
     <string name="price">Цена: </string>
     <string name="location_from">Откуда Вас забрать?</string>
     <string name="location_to">Куда Вас доставить?</string>
+    <string name="text_select_time">Выберите время:</string>
+    <string name="now">Сейчас</string>
 
 
 </resources>

@@ -2,7 +2,10 @@ package ru.alexandra.taxi.view.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.Loader;
@@ -63,6 +66,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.tukla.www.tukla.R;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -86,6 +92,7 @@ public class MainActivity extends AppCompatActivity
     Button buttonOrder;
     Button buttonLocationTo;
     TextView textPrice;
+    View containerTime;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -131,6 +138,7 @@ public class MainActivity extends AppCompatActivity
         buttonLocationTo = (Button) findViewById(R.id.buttonLocationTo);
         buttonOrder = (Button) findViewById(R.id.buttonOrder);
         textPrice = (TextView) findViewById(R.id.price_text);
+        containerTime = findViewById(R.id.containerTime);
 
         buttonOrder.setOnClickListener(v -> {
             controller.onClickOrder();
@@ -140,6 +148,24 @@ public class MainActivity extends AppCompatActivity
         });
         buttonLocationFrom.setOnClickListener(view -> {
             controller.onClickSelectLocation(LocationType.FROM);
+        });
+        containerTime.setOnClickListener(v -> {
+            Context context = this;
+            Calendar calendarToday = Calendar.getInstance();
+            calendarToday.add(Calendar.MINUTE, 15);
+
+            Calendar calendarMax = Calendar.getInstance();
+            calendarMax.add(Calendar.DAY_OF_MONTH, 7);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(context, (view1, hourOfDay, minute) -> {
+                    controller.onSelectTime(year, month, dayOfMonth, hourOfDay, minute);
+                }, calendarToday.get(Calendar.HOUR_OF_DAY), calendarToday.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
+            }, calendarToday.get(Calendar.YEAR), calendarToday.get(Calendar.MONTH), calendarToday.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+            datePickerDialog.getDatePicker().setMaxDate(calendarMax.getTimeInMillis());
+            datePickerDialog.show();
         });
     }
 
@@ -652,6 +678,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void setOrderEnabled(boolean enable) {
         buttonOrder.setEnabled(enable);
+    }
+
+    @Override
+    public void showOrderTime(Calendar orderTime) {
+        String time = new SimpleDateFormat("d MMMM, HH:mm").format(new Date(orderTime.getTimeInMillis()));
+        buttonOrder.setText(getString(R.string.make_order) + " на " + time);
     }
 
     @Override
