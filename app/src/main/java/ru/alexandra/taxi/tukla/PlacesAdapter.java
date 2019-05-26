@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHolder > {
 
-    private List<Places> myPlacesList;
+    private List<Place> myPlacesList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
@@ -31,7 +31,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHold
         }
     }
 
-    public PlacesAdapter(List<Places>myPlacesList){
+    public PlacesAdapter(List<Place>myPlacesList){
         this.myPlacesList=myPlacesList;
     }
 
@@ -47,7 +47,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(PlacesAdapter.MyViewHolder holder, int position) {
-        Places places =myPlacesList.get( position );
+        Place places =myPlacesList.get( position );
         holder.primaryText.setText( places.getPrimaryText() );
         holder.secText.setText( places.getAddressDescription() );
         holder.distText.setText( places.getDistance() );

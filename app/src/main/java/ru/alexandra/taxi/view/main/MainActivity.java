@@ -1,4 +1,4 @@
-package ru.alexandra.taxi.view;
+package ru.alexandra.taxi.view.main;
 
 import android.Manifest;
 import android.app.Activity;
@@ -36,6 +36,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -65,7 +67,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ru.alexandra.taxi.controller.MainController;
-import ru.alexandra.taxi.tukla.LocationAutoActivity;
+import ru.alexandra.taxi.view.location.LocationActivity;
 
 import static com.tukla.www.tukla.R.id.map;
 
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity
     List<android.location.Address> addresses;
 
     MainController controller = new MainController();
+    private LocationType type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +164,6 @@ public class MainActivity extends AppCompatActivity
         mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     protected void onStart() {
@@ -379,6 +381,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("onActivityResult()", Integer.toString(resultCode));
 
+        int a = 1;
         //final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
@@ -402,6 +405,12 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 break;
+        }
+
+        if (type != null) {
+            ru.alexandra.taxi.tukla.Place place = type.extractLocation(this, requestCode, resultCode, data);
+            controller.onLocationSelected(type, place);
+            type = null;
         }
     }
 
@@ -626,7 +635,7 @@ public class MainActivity extends AppCompatActivity
     public void myLocation(View view) {
 
         //CHANGE ACTIVITY
-        Intent intent = new Intent(MainActivity.this, LocationAutoActivity.class);
+        Intent intent = new Intent(MainActivity.this, LocationActivity.class);
         startActivity(intent);
 
 
@@ -634,7 +643,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public void destination(View view) {
-        Intent intent = new Intent(MainActivity.this, LocationAutoActivity.class);
+        Intent intent = new Intent(MainActivity.this, LocationActivity.class);
         startActivity(intent);
 
     }
@@ -685,9 +694,27 @@ public class MainActivity extends AppCompatActivity
         alert.show();
     }
 
+    @Override
+    public void showSelectedLocation(LocationType type, ru.alexandra.taxi.tukla.Place place) {
+        switch (type) {
+            case FROM:
+                buttonLocationFrom.setText(place.toString());
+                break;
+            case TO:
+                buttonLocationTo.setText(place.toString());
+                break;
+        }
+    }
 
     @Override
     public void showSelectLocationView(LocationType type) {
-        getApplicationContext().startActivity(type.getIntent(this));
+        this.type = type;
+        try {
+            type.selectLocation(this);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        }
     }
 }

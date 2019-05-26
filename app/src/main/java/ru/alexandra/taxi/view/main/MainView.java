@@ -1,4 +1,6 @@
-package ru.alexandra.taxi.view;
+package ru.alexandra.taxi.view.main;
+
+import ru.alexandra.taxi.tukla.Place;
 
 /**
  * @author Anton Vlasov - whalemare
@@ -6,4 +8,6 @@ package ru.alexandra.taxi.view;
  */
 public interface MainView {
     void showSelectLocationView(LocationType type);
+
+    void showSelectedLocation(LocationType type, Place place);
 }
