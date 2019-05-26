@@ -18,4 +18,6 @@ public interface MainView {
     void setOrderEnabled(boolean enable);
 
     void showOrderTime(Calendar orderTime);
+
+    void showOrderSuccessDialog(Calendar orderTime);
 }

@@ -33,7 +33,9 @@ public class MainController extends BaseController<MainView> {
      * Пользователь хочет закать такси
      */
     public void onClickOrder() {
-
+        isAttach(view -> {
+            view.showOrderSuccessDialog(orderTime);
+        });
     }
 
     public void onLocationSelected(LocationType type, Place place) {
@@ -49,7 +51,13 @@ public class MainController extends BaseController<MainView> {
         isAttach(view -> view.showSelectedLocation(type, place));
         isAttach(view -> {
             view.showPrice(price);
-            view.setOrderEnabled(userRoute.first != null & userRoute.second != null && orderTime != null);
+            validateButton();
+        });
+    }
+
+    private void validateButton() {
+        isAttach(view -> {
+            view.setOrderEnabled(userRoute.first != null & userRoute.second != null && orderTime != null && orderTime.getTimeInMillis() > System.currentTimeMillis());
         });
     }
 
@@ -58,5 +66,6 @@ public class MainController extends BaseController<MainView> {
         calendar.set(year, month, dayOfMonth, hourOfDay, minute);
         orderTime = calendar;
         isAttach(view -> view.showOrderTime(orderTime));
+        validateButton();
     }
 }

@@ -687,6 +687,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void showOrderSuccessDialog(Calendar orderTime) {
+
+    }
+
+    @Override
     public void showSelectLocationView(LocationType type) {
         this.type = type;
         try {
