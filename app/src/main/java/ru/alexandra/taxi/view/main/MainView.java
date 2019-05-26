@@ -12,4 +12,6 @@ public interface MainView {
     void showSelectedLocation(LocationType type, Place place);
 
     void showPrice(int price);
+
+    void setOrderEnabled(boolean enable);
 }

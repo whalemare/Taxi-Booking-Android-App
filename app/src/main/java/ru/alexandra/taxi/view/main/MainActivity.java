@@ -67,7 +67,6 @@ import java.util.List;
 import java.util.Locale;
 
 import ru.alexandra.taxi.controller.MainController;
-import ru.alexandra.taxi.view.location.LocationActivity;
 
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 import static com.tukla.www.tukla.R.id.map;
@@ -429,7 +428,6 @@ public class MainActivity extends AppCompatActivity
                     .title("Your Location"));
 
                 mMap.animateCamera(update);
-                //buttonLocationFrom.setText( ""+latitude );
 
 
             } catch (Exception ex) {
@@ -448,8 +446,11 @@ public class MainActivity extends AppCompatActivity
                     String localityString = returnAddress.getAddressLine(0);
                     str.append(localityString);
 
-                    buttonLocationFrom.setText(str);
-                    Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+                    controller.onLocationSelected(LocationType.FROM, new ru.alexandra.taxi.model.Place(
+                        localityString,
+                        localityString,
+                        returnAddress.toString()
+                    ));
                     FusedLocationApi.removeLocationUpdates(googleApiClient, this);
                 } else {
                     Toast.makeText(getApplicationContext(), "geocoder not present", Toast.LENGTH_SHORT).show();
@@ -600,20 +601,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    //Button Location Search
-    public void myLocation(View view) {
-        Intent intent = new Intent(MainActivity.this, LocationActivity.class);
-        startActivity(intent);
-    }
-
-
-    public void destination(View view) {
-        Intent intent = new Intent(MainActivity.this, LocationActivity.class);
-        startActivity(intent);
-    }
-
-
     public void img_selected(View view) {
         products_select_option.setVisibility(View.VISIBLE);
     }
@@ -621,7 +608,6 @@ public class MainActivity extends AppCompatActivity
     //Select product option button click
     public void product_type_1_button(View view) {
         products_select_option.setVisibility(View.GONE);
-
     }
 
     //Select product option button click
@@ -661,6 +647,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showPrice(int price) {
         textPrice.setText(String.valueOf(price));
+    }
+
+    @Override
+    public void setOrderEnabled(boolean enable) {
+        buttonOrder.setEnabled(enable);
     }
 
     @Override

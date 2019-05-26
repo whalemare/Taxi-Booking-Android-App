@@ -101,7 +101,6 @@
                                     android:gravity="left|center_vertical"
                                     android:hint="@string/location_from"
                                     android:maxLines="1"
-                                    android:onClick="myLocation"
                                     android:paddingLeft="@dimen/button_padding1"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
@@ -162,7 +161,6 @@
                                     android:gravity="left|center_vertical"
                                     android:hint="@string/location_to"
                                     android:maxLines="1"
-                                    android:onClick="myLocation"
                                     android:paddingLeft="@dimen/button_padding1"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
@@ -218,15 +216,14 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                >
+                android:layout_height="match_parent">
 
                 <Button
                     android:id="@+id/buttonOrder"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
+                    android:enabled="false"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
                     android:gravity="center|center_vertical"
@@ -253,7 +250,6 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginRight="30dp"
                             android:layout_marginBottom="5dp">
-
 
                             <TextView
                                 android:id="@+id/price_text"

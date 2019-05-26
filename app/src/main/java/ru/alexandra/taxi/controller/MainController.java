@@ -44,6 +44,9 @@ public class MainController extends BaseController<MainView> {
         }
         int price = interactor.calculatePrice(userRoute);
         isAttach(view -> view.showSelectedLocation(type, place));
-        isAttach(view -> view.showPrice(price));
+        isAttach(view -> {
+            view.showPrice(price);
+            view.setOrderEnabled(userRoute.first != null & userRoute.second != null);
+        });
     }
 }
