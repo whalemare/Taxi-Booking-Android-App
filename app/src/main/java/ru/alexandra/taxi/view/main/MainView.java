@@ -2,6 +2,7 @@ package ru.alexandra.taxi.view.main;
 
 import java.util.Calendar;
 
+import ru.alexandra.taxi.model.Driver;
 import ru.alexandra.taxi.model.Place;
 
 /**
@@ -19,5 +20,5 @@ public interface MainView {
 
     void showOrderTime(Calendar orderTime);
 
-    void showOrderSuccessDialog(Calendar orderTime);
+    void showOrderSuccessDialog(Calendar orderTime, Driver driver);
 }

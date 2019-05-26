@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ru.alexandra.taxi.controller.MainController;
+import ru.alexandra.taxi.model.Driver;
 
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 import static com.tukla.www.tukla.R.id.map;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity
     Button buttonOrder;
     Button buttonLocationTo;
     TextView textPrice;
+    TextView textTime;
     View containerTime;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity
         buttonLocationTo = (Button) findViewById(R.id.buttonLocationTo);
         buttonOrder = (Button) findViewById(R.id.buttonOrder);
         textPrice = (TextView) findViewById(R.id.price_text);
+        textTime = findViewById(R.id.textTime);
         containerTime = findViewById(R.id.containerTime);
 
         buttonOrder.setOnClickListener(v -> {
@@ -684,11 +687,19 @@ public class MainActivity extends AppCompatActivity
     public void showOrderTime(Calendar orderTime) {
         String time = new SimpleDateFormat("d MMMM, HH:mm").format(new Date(orderTime.getTimeInMillis()));
         buttonOrder.setText(getString(R.string.make_order) + " на " + time);
+        textTime.setText(time);
     }
 
     @Override
-    public void showOrderSuccessDialog(Calendar orderTime) {
-
+    public void showOrderSuccessDialog(Calendar orderTime, Driver driver) {
+        String time = new SimpleDateFormat("d MMMM, HH:mm").format(new Date(orderTime.getTimeInMillis()));
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.text_success_ordered)
+            .setMessage(getString(R.string.text_success_ordered_description, time, driver.getName(), driver.getCarName()))
+            .setPositiveButton(R.string.text_ok, (dialog, which) -> {
+                dialog.dismiss();
+            })
+            .show();
     }
 
     @Override

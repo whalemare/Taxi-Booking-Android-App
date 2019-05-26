@@ -18,6 +18,9 @@
     <string name="location_to">Куда Вас доставить?</string>
     <string name="text_select_time">Выберите время:</string>
     <string name="now">Сейчас</string>
+    <string name="text_success_ordered">Такси заказано</string>
+    <string name="text_success_ordered_description">Машина подъедет к Вам в %1$s.\nВаш водитель %2$s\nМашина: %3$s</string>
+    <string name="text_ok">Ок</string>
 
 
 </resources>

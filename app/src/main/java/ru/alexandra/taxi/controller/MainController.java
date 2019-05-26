@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import java.util.Calendar;
 
+import ru.alexandra.taxi.model.Driver;
 import ru.alexandra.taxi.model.MainInteractor;
 import ru.alexandra.taxi.model.Place;
 import ru.alexandra.taxi.view.main.LocationType;
@@ -33,8 +34,9 @@ public class MainController extends BaseController<MainView> {
      * Пользователь хочет закать такси
      */
     public void onClickOrder() {
+        Driver driver = interactor.makeOrder(orderTime);
         isAttach(view -> {
-            view.showOrderSuccessDialog(orderTime);
+            view.showOrderSuccessDialog(orderTime, driver);
         });
     }
 
