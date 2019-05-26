@@ -3,7 +3,6 @@ package ru.alexandra.taxi.view.main;
 import android.Manifest;
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.Loader;
@@ -69,6 +68,7 @@ import java.util.Locale;
 import ru.alexandra.taxi.controller.MainController;
 import ru.alexandra.taxi.view.location.LocationActivity;
 
+import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 import static com.tukla.www.tukla.R.id.map;
 
 public class MainActivity extends AppCompatActivity
@@ -169,6 +169,9 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
+        if (googleApiClient.isConnected()) {
+            setInitialLocation();
+        }
     }
 
     @Override
@@ -185,27 +188,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (googleApiClient.isConnected()) {
-            setInitialLocation();
-        }
 
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        // Check if enabled and if not send user to the GPS settings
+        // Проверяем включен ли gps
         if (!enabled) {
             buildAlertMessageNoGps();
         }
-        if (enabled) {
-            //mMap.animateCamera( update );
-/*
-            Toast.makeText( MainActivity.this, "OnResume:"+latitude+","+longitude, Toast.LENGTH_SHORT ).show();
-*/
-
-
-        }
-
-
     }
 
 
@@ -325,7 +315,6 @@ public class MainActivity extends AppCompatActivity
 
 
     protected void createLocationRequest() {
-
         request = new LocationRequest();
         request.setSmallestDisplacement(10);
         request.setFastestInterval(50000);
@@ -380,9 +369,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("onActivityResult()", Integer.toString(resultCode));
-
-        int a = 1;
-        //final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
@@ -416,66 +402,58 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Установим начальную позицию
+     * Один раз установим начальную позицию
      */
     private void setInitialLocation() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
+        FusedLocationApi.requestLocationUpdates(googleApiClient, request, location -> {
+            mLastLocation = location;
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
 
-                mLastLocation = location;
-                double lat = location.getLatitude();
-                double lng = location.getLongitude();
+            MainActivity.this.latitude = lat;
+            MainActivity.this.longitude = lng;
 
-                MainActivity.this.latitude = lat;
-                MainActivity.this.longitude = lng;
-
-                try {
-                    if (now != null) {
-                        now.remove();
-                    }
-                    LatLng positionUpdate = new LatLng(MainActivity.this.latitude, MainActivity.this.longitude);
-                    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(positionUpdate, 15);
-                    now = mMap.addMarker(new MarkerOptions().position(positionUpdate)
-                        .title("Your Location"));
-
-                    mMap.animateCamera(update);
-                    //buttonLocationFrom.setText( ""+latitude );
-
-
-                } catch (Exception ex) {
-
-                    ex.printStackTrace();
-                    Log.e("MapException", ex.getMessage());
-
+            try {
+                if (now != null) {
+                    now.remove();
                 }
+                LatLng positionUpdate = new LatLng(MainActivity.this.latitude, MainActivity.this.longitude);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(positionUpdate, 15);
+                now = mMap.addMarker(new MarkerOptions().position(positionUpdate)
+                    .title("Your Location"));
 
-                //Geocode current location details
-                try {
-                    geocoder = new Geocoder(MainActivity.this, Locale.ENGLISH);
-                    addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                    StringBuilder str = new StringBuilder();
-                    if (Geocoder.isPresent()) {
-                        android.location.Address returnAddress = addresses.get(0);
+                mMap.animateCamera(update);
+                //buttonLocationFrom.setText( ""+latitude );
 
-                        String localityString = returnAddress.getAddressLine(0);
-                        str.append(localityString);
 
-                        buttonLocationFrom.setText(str);
-                        Toast.makeText(getApplicationContext(), str,
-                            Toast.LENGTH_SHORT).show();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Log.e("MapException", ex.getMessage());
+            }
 
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                            "geocoder not present", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (IOException e) {
-                    Log.e("tag", e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Ошибка" + e, Toast.LENGTH_LONG).show();
+            //Geocode current location details
+            try {
+                geocoder = new Geocoder(MainActivity.this, Locale.ENGLISH);
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                StringBuilder str = new StringBuilder();
+                if (Geocoder.isPresent()) {
+                    android.location.Address returnAddress = addresses.get(0);
+
+                    String localityString = returnAddress.getAddressLine(0);
+                    str.append(localityString);
+
+                    buttonLocationFrom.setText(str);
+                    Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+                    FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+                } else {
+                    Toast.makeText(getApplicationContext(), "geocoder not present", Toast.LENGTH_SHORT).show();
                 }
+            } catch (IOException e) {
+                Log.e("tag", e.getMessage());
+                Toast.makeText(getApplicationContext(), "Ошибка" + e, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -533,18 +511,12 @@ public class MainActivity extends AppCompatActivity
                         final Place place = places.get(0);
 
                         LatLng latLng = place.getLatLng();
-
                         try {
-
                             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
                             mMap.animateCamera(update);
-
-
                         } catch (Exception ex) {
-
                             ex.printStackTrace();
                             Log.e("MapException", ex.getMessage());
-
                         }
 
                         Log.i("place", "Place found: " + place.getName());
@@ -576,9 +548,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
 
-
     }
-
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
@@ -602,9 +572,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //GET CURRENT LOCATION BUTTON POSITION....
     private void locationButton() {
-
         MapFragment mapFragment = (MapFragment) getFragmentManager()
             .findFragmentById(map);
 
@@ -627,33 +595,24 @@ public class MainActivity extends AppCompatActivity
 
             locationButton.setLayoutParams(params);
         }
-
     }
 
 
     //Button Location Search
     public void myLocation(View view) {
-
-        //CHANGE ACTIVITY
         Intent intent = new Intent(MainActivity.this, LocationActivity.class);
         startActivity(intent);
-
-
     }
 
 
     public void destination(View view) {
         Intent intent = new Intent(MainActivity.this, LocationActivity.class);
         startActivity(intent);
-
     }
 
 
-    //Select product option button click
     public void img_selected(View view) {
-
         products_select_option.setVisibility(View.VISIBLE);
-
     }
 
     //Select product option button click
@@ -671,25 +630,15 @@ public class MainActivity extends AppCompatActivity
     //Enable Location Button
     private void checkLocaionStatus() {
 
-
     }
-
 
     protected void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Please Turn ON your GPS Connection")
-            .setTitle("GPS Not Enabled")
+        builder.setMessage("Пожалуйста включите геолокацию")
+            .setTitle("GPS выключен")
             .setCancelable(false)
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(final DialogInterface dialog, final int id) {
-                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                }
-            })
-            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(final DialogInterface dialog, final int id) {
-                    dialog.cancel();
-                }
-            });
+            .setPositiveButton("Да", (dialog, id) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+            .setNegativeButton("Нет", (dialog, id) -> dialog.cancel());
         final AlertDialog alert = builder.create();
         alert.show();
     }
